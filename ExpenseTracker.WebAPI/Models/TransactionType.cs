@@ -1,12 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExpenseTracker.WebAPI.Models
 {
-    public class TransactionType
+    public class TransactionType : TransactionDetails
     {
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public DateTime DateAdded { get; set; }
-        public string AddedBy { get; set; }
+
     }
 }
