@@ -9,7 +9,8 @@ namespace ExpenseTracker.WebAPI.Models
         [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Title property is required")]
-        [Range(2, 20, ErrorMessage = "Title must not be less that 2 characters or greater than 20 characters")]
+        [StringLength(50, ErrorMessage = "Title must not be more that 50 characters")]
+        [MinLength(2, ErrorMessage = "Title must not be less that 2 characters")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "User Id is required")]
@@ -23,7 +24,8 @@ namespace ExpenseTracker.WebAPI.Models
         public TransactionMethod TransactionMethod { get; set; }
 
         [Required(ErrorMessage = "Give a deacription for the transaction", AllowEmptyStrings = false)]
-        [Range(2, 50, ErrorMessage = "Description must not be less than 2 characters and not more that 50 characters")]
+        [StringLength(50, ErrorMessage = "Description must not be more that 50 characters")]
+        [MinLength(2, ErrorMessage = "Description must not be less that 2 characters")]
         public string Description { get; set; }
         public DateTime TransactionDate { get; set; } = DateTime.Now;
 

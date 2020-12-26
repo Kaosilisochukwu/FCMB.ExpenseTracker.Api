@@ -10,11 +10,13 @@ namespace ExpenseTracker.WebAPI.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Title is required", AllowEmptyStrings = false)]
-        [Range(2, 20, ErrorMessage = "Title must not be less that 2 characters or greater than 20 characters")]
+        [StringLength(50, ErrorMessage = "Title must not be more that 50 characters")]
+        [MinLength(2, ErrorMessage = "Title must not be less that 2 characters")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Description is required")]
-        [Range(2, 50, ErrorMessage = "Description must not be less than 2 characters and not more that 50 characters")]
+        [StringLength(50, ErrorMessage = "Description must not be more that 50 characters")]
+        [MinLength(2, ErrorMessage = "Description must not be less that 2 characters")]
         public string Description { get; set; }
 
         public DateTime DateAdded { get; set; } = DateTime.Now;
