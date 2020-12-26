@@ -14,6 +14,5 @@ namespace ExpenseTracker.WebAPI.Data
 
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionMethod> TransactionMethods { get; set; }
-        public DbSet<TransactionType> TransactionTypes { get; set; }
     }
 }
