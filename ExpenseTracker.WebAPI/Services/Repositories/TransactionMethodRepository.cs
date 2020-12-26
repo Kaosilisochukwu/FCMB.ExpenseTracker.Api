@@ -1,6 +1,9 @@
-﻿using ExpenseTracker.WebAPI.DTOs;
+﻿using AutoMapper;
+using ExpenseTracker.WebAPI.Data;
+using ExpenseTracker.WebAPI.DTOs;
 using ExpenseTracker.WebAPI.Models;
 using ExpenseTracker.WebAPI.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +13,48 @@ namespace ExpenseTracker.WebAPI.Services.Repositories
 {
     public class TransactionMethodRepository : ITransactionMethodRepository
     {
-        public Task<int> AddTransationMethod(TransactionMethodToAddDTO transactionMenthod)
+        private readonly IMapper _mapper;
+        private readonly AppDbContext _context;
+
+        public TransactionMethodRepository(IMapper mapper, AppDbContext context)
         {
-            throw new NotImplementedException();
+            _mapper = mapper;
+            _context = context;
+        }
+        public async Task<int> AddTransationMethod(TransactionMethod transactionMethod)
+        {
+            await _context.TransactionMethods.AddAsync(transactionMethod);
+            var saveResult = await _context.SaveChangesAsync();
+            return saveResult;
         }
 
-        public Task<int> DeleteTransactionMethod(TransactionMethod transactionMethod)
+        public async Task<int> DeleteTransactionMethod(TransactionMethod transactionMethod)
         {
-            throw new NotImplementedException();
+            _context.TransactionMethods.Remove(transactionMethod);
+            var updateResult = await _context.SaveChangesAsync();
+            return updateResult;
         }
 
-        public Task<int> EditTransactionMethod(TransactionMethod transactionMethod)
+        public async Task<int> EditTransactionMethod(TransactionMethod transactionMethod)
         {
-            throw new NotImplementedException();
+            _context.TransactionMethods.Update(transactionMethod);
+            var updateResult = await _context.SaveChangesAsync();
+            return updateResult;
         }
 
-        public Task<IEnumerable<TransactionMethod>> GetAllTransactions()
+        public async Task<IEnumerable<TransactionMethod>> GetAllTransactionMethods()
         {
-            throw new NotImplementedException();
+            return await _context.TransactionMethods.ToListAsync();
         }
 
-        public Task<TransactionMethod> GetTransactionMethodById(int id)
+        public async Task<TransactionMethod> GetTransactionMethodById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.TransactionMethods.FirstOrDefaultAsync(transactionMethod => transactionMethod.Id == id);
+        }
+
+        public async Task<TransactionMethod> GetTransactionMethodByTitle(string title)
+        {
+            return await _context.TransactionMethods.FirstOrDefaultAsync(transactionMethod => transactionMethod.Title == title);
         }
     }
 }

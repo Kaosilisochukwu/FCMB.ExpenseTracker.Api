@@ -9,10 +9,11 @@ namespace ExpenseTracker.WebAPI.Services.Interfaces
 {
     public interface ITransactionMethodRepository
     {
-        public Task<int> AddTransationMethod(TransactionMethodToAddDTO transactionMenthod);
+        public Task<int> AddTransationMethod(TransactionMethod transactionMenthod);
         public Task<int> EditTransactionMethod(TransactionMethod transactionMethod);
-        public Task<IEnumerable<TransactionMethod>> GetAllTransactions();
+        public Task<IEnumerable<TransactionMethod>> GetAllTransactionMethods();
         public Task<TransactionMethod> GetTransactionMethodById(int id);
+        public Task<TransactionMethod> GetTransactionMethodByTitle(string title);
         public Task<int> DeleteTransactionMethod(TransactionMethod transactionMethod);
     }
 }
