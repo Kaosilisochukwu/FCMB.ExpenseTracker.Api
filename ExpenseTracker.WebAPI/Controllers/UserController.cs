@@ -42,28 +42,13 @@ namespace ExpenseTracker.WebAPI.Controllers
                 if (registrationResult.Succeeded)
                 {
                     var userToReturn = _mapper.Map<UserDTO>(user);
-                    return Created("register", new ResponseModel 
-                    { 
-                        Status = 201,
-                        Message = "User Was successfully registered",
-                        Data = userToReturn
-                    });
+                    return Created("register", new ResponseModel(201, "User Was successfully registered", userToReturn));
                 }
                 var error = registrationResult.Errors;
-                return BadRequest(new ResponseModel
-                {
-                    Status = 400,
-                    Message = "Registration Failed",
-                    Data = error
-                });
+                return BadRequest(new ResponseModel(400, "Registration Failed", error));
             }
             var errors = ModelState.Values.Select(model => model.Errors).ToList();
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "There are some validation Errors",
-                Data = errors
-            });
+            return BadRequest(new ResponseModel(400, "There are some validation Errors", errors));
         }
 
         [HttpPost]
@@ -78,27 +63,12 @@ namespace ExpenseTracker.WebAPI.Controllers
                 {
                     var roles = (await _userManager.GetRolesAsync(user)).ToList();
                     var token = TokenConfiguration.GenerateToken(user, _config, roles);
-                    return Ok(new ResponseModel
-                    {
-                        Status = 200,
-                        Message = "User Was successfully Logged in",
-                        Data = new { token }
-                    });
+                    return Ok(new ResponseModel(200, "User Was successfully Logged in", new { token }));
                 }
-                return BadRequest(new ResponseModel
-                {
-                    Status = 400,
-                    Message = "Login Failed",
-                    Data = signInResult
-                });
+                return BadRequest(new ResponseModel(400, "Login Failed", signInResult));
             }
             var errors = ModelState.Values.Select(model => model.Errors).ToList();
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "There are some validation Errors",
-                Data = errors
-            });
+            return BadRequest(new ResponseModel(400, "There are some validation Errors", errors));
         }
 
         [HttpPatch]
@@ -113,27 +83,12 @@ namespace ExpenseTracker.WebAPI.Controllers
                 if (updateResult.Succeeded)
                 {
 
-                    return Ok(new ResponseModel
-                    {
-                        Status = 200,
-                        Message = "Profile sucessfully updated",
-                        Data = userToReturn
-                    });
+                    return Ok(new ResponseModel(200, "Profile sucessfully updated", userToReturn));
                 }
-                return BadRequest(new ResponseModel
-                {
-                    Status = 400,
-                    Message = "Update Failed",
-                    Data = userToReturn
-                });
+                return BadRequest(new ResponseModel(400, "Update Failed", userToReturn));
             }
             var errors = ModelState.Values.Select(model => model.Errors).ToList();
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "There are some validation Errors",
-                Data = errors
-            });
+            return BadRequest(new ResponseModel(400, "There are some validation Errors", errors));
         }
 
         [HttpPost]
@@ -149,19 +104,9 @@ namespace ExpenseTracker.WebAPI.Controllers
             if (updateResult.Succeeded)
             {
                 var userToReturn = _mapper.Map<UserDTO>(user);
-                return Ok(new ResponseModel
-                {
-                    Status = 200,
-                    Message = "Success",
-                    Data = userToReturn
-                });
+                return Ok(new ResponseModel(200, "Success", userToReturn));
             }
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "Update failed",
-                Data = photoToUpdate
-            });
+            return BadRequest(new ResponseModel(400, "Update failed", photoToUpdate));
         }
 
         [HttpPatch]
@@ -174,31 +119,16 @@ namespace ExpenseTracker.WebAPI.Controllers
             var userToReturn = _mapper.Map<UserDTO>(user);
             if (user == null)
             {
-                return BadRequest(new ResponseModel
-                {
-                    Status = 400,
-                    Message = "User does not exist",
-                    Data = userToReturn
-                });
+                return BadRequest(new ResponseModel(400, "User does not exist", userToReturn));
             }
             user.PhotoUrl = null;
             user.PhotoPublicId = null;
             var updateResult = await _userManager.UpdateAsync(user);
             if (updateResult.Succeeded)
             {
-                return Ok(new ResponseModel
-                {
-                    Status = 200,
-                    Message = "Success",
-                    Data = userToReturn
-                });
+                return Ok(new ResponseModel(200, "Success", userToReturn));
             }
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "Update failed",
-                Data = userToReturn
-            });
+            return BadRequest(new ResponseModel(400, "Update failed", userToReturn));
         }
 
         [HttpPost]

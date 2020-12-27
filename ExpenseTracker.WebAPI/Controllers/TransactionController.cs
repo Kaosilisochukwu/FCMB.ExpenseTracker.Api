@@ -40,28 +40,13 @@ namespace ExpenseTracker.WebAPI.Controllers
                 var response = await _transactionRepo.AddTransaction(transaction);
                 if(response > 0)
                 {
-                    return Created("addTransation", new ResponseModel
-                    {
-                        Status = 201,
-                        Message = "Transaction successfully added",
-                        Data = transaction
-                    });
+                    return Created("addTransation", new ResponseModel(201, "Transaction successfully added", transaction));
                 }
-                return BadRequest(new ResponseModel
-                {
-                    Status = 400,
-                    Message = "Transaction not added",
-                    Data = transaction
-                });
+                return BadRequest(new ResponseModel(400, "Transaction not added", transaction));
             }
 
             var errors = ModelState.Values.Select(model => model.Errors).ToList();
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "There are some validation Errors",
-                Data = errors
-            });
+            return BadRequest(new ResponseModel(400, "There are some validation Errors", errors));
         }
         [HttpPatch]
         public async Task<IActionResult> EditTransaction([FromBody] Transaction transaction)
@@ -74,34 +59,14 @@ namespace ExpenseTracker.WebAPI.Controllers
                     var editResult = await _transactionRepo.EditTransaction(transaction);
                     if(editResult > 0)
                     {
-                        return Ok(new ResponseModel
-                        {
-                            Status = 200,
-                            Message = "Transaction successfully updated",
-                            Data = transaction
-                        });
+                        return Ok(new ResponseModel(200, "Transaction successfully updated", transaction));
                     }
-                    return BadRequest(new ResponseModel
-                    {
-                        Status = 400,
-                        Message = "Transaction not updated",
-                        Data = transaction
-                    });
+                    return BadRequest(new ResponseModel(400, "Transaction not updated", transaction));
                 }
-                return Unauthorized(new ResponseModel
-                {
-                    Status = 401,
-                    Message = "You are not allowed to edit this Transaction details",
-                    Data = transaction
-                });
+                return Unauthorized(new ResponseModel(401, "You are not allowed to edit this Transaction details", transaction));
             }
             var errors = ModelState.Values.Select(model => model.Errors).ToList();
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "There are some validation Errors",
-                Data = errors
-            });
+            return BadRequest(new ResponseModel(400, "There are some validation Errors", errors));
         }
 
         [HttpGet]
@@ -112,20 +77,10 @@ namespace ExpenseTracker.WebAPI.Controllers
             {
                 var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var transactions = await _transactionRepo.FilterTransactionsByDateRange(startDate, endDate, userId);
-                return Ok(new ResponseModel
-                {
-                    Status = 200,
-                    Message = "Success",
-                    Data = transactions
-                });
+                return Ok(new ResponseModel(200, "Success", transactions));
             }
             var errors = ModelState.Values.Select(model => model.Errors).ToList();
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "Query parameters are not valid",
-                Data = errors
-            });
+            return BadRequest(new ResponseModel(400, "Query parameters are not valid", errors));
         }
 
         [HttpGet]
@@ -133,13 +88,8 @@ namespace ExpenseTracker.WebAPI.Controllers
         public async Task<IActionResult> FilterTransactionsByTitle(string title)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var transactions = await _transactionRepo.FilterTransactionsByTitle(title, userId); 
-            return Ok(new ResponseModel
-            {
-                Status = 200,
-                Message = "Success",
-                Data = transactions
-            });
+            var transactions = await _transactionRepo.FilterTransactionsByTitle(title, userId);
+            return Ok(new ResponseModel(200, "Success", transactions));
         }
 
         [HttpGet]
@@ -148,12 +98,7 @@ namespace ExpenseTracker.WebAPI.Controllers
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var transactions = await _transactionRepo.FilterTransactionsByTransactionsByDate(date, userId);
-            return Ok(new ResponseModel
-            {
-                Status = 200,
-                Message = "Success",
-                Data = transactions
-            });
+            return Ok(new ResponseModel(200, "Success", transactions));
         }
 
         [HttpGet]
@@ -162,12 +107,7 @@ namespace ExpenseTracker.WebAPI.Controllers
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var transactions = await _transactionRepo.FilterTransactionsByTransactionsMethod(transactionMethodId, userId);
-            return Ok(new ResponseModel
-            {
-                Status = 200,
-                Message = "Success",
-                Data = transactions
-            });
+            return Ok(new ResponseModel(200, "Success", transactions));
         }
 
 
@@ -176,12 +116,7 @@ namespace ExpenseTracker.WebAPI.Controllers
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var transactions = await _transactionRepo.GetAllTransactions(userId);
-            return Ok(new ResponseModel
-            {
-                Status = 200,
-                Message = "Success",
-                Data = transactions
-            });
+            return Ok(new ResponseModel(200, "Success", transactions));
         }
         [HttpGet]
         [Route("{transactionId:int}")]
@@ -189,12 +124,7 @@ namespace ExpenseTracker.WebAPI.Controllers
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var transaction = await _transactionRepo.GetTransactionById(transactionId, userId); 
-            return Ok(new ResponseModel
-            {
-                Status = 200,
-                Message = "Success",
-                Data = transaction
-            });
+            return Ok(new ResponseModel(200, "Success", transaction));
         }
     }
 }

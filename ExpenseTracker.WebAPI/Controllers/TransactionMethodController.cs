@@ -34,19 +34,9 @@ namespace ExpenseTracker.WebAPI.Controllers
             var response = await _transactionRepo.AddTransationMethod(transactionMethod);
             if (response > 0)
             {
-                return Created("add", new ResponseModel
-                {
-                    Status = 201,
-                    Message = "Success",
-                    Data = transactionMethod
-                });
+                return Created("add", new ResponseModel(201, "Success", transactionMethod));
             }
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "Failed",
-                Data = transactionMethod
-            });
+            return BadRequest(new ResponseModel(400, "Failed", transactionMethod));
         }
          [HttpDelete]
         [Route("{id}/delete")]
@@ -55,29 +45,14 @@ namespace ExpenseTracker.WebAPI.Controllers
             var transactionMethod = await _transactionRepo.GetTransactionMethodById(id);
             if (transactionMethod == null)
             {
-                return NotFound(new ResponseModel
-                {
-                    Status = 404,
-                    Message = "Transaction method does not exist",
-                    Data = transactionMethod
-                });
+                return NotFound(new ResponseModel(404, "Transaction method does not exist", transactionMethod));
             }
             var deleteResult = await _transactionRepo.DeleteTransactionMethod(transactionMethod);
             if (deleteResult > 0)
             {
-                return Ok(new ResponseModel
-                {
-                    Status = 200,
-                    Message = "Success",
-                    Data = transactionMethod
-                });
+                return Ok(new ResponseModel(200, "Success", transactionMethod));
             }
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "Failed",
-                Data = transactionMethod
-            });
+            return BadRequest(new ResponseModel(400, "Failed", transactionMethod));
         }
 
         [HttpPatch]
@@ -88,31 +63,16 @@ namespace ExpenseTracker.WebAPI.Controllers
             var editResult = await _transactionRepo.EditTransactionMethod(transactionMethod);
             if (editResult > 0)
             {
-                return Ok(new ResponseModel
-                {
-                    Status = 200,
-                    Message = "Success",
-                    Data = transactionMethod
-                });
+                return Ok(new ResponseModel(200, "Success", transactionMethod));
             }
-            return BadRequest(new ResponseModel
-            {
-                Status = 400,
-                Message = "Failed",
-                Data = transactionMethod
-            });
+            return BadRequest(new ResponseModel(400, "Failed", transactionMethod));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllTransactionMethods()
         {
             var transactionMethods = await _transactionRepo.GetAllTransactionMethods();
-            return Ok(new ResponseModel
-            {
-                Status = 200,
-                Message = "Success",
-                Data = transactionMethods
-            });
+            return Ok(new ResponseModel(200, "Success", transactionMethods));
         }
 
         [Route("search/{id:int}")]
@@ -120,24 +80,14 @@ namespace ExpenseTracker.WebAPI.Controllers
         public async Task<IActionResult> GetTransactionMethodById(int id)
         {
             var transactionMethod = await _transactionRepo.GetTransactionMethodById(id);
-            return Ok(new ResponseModel
-            {
-                Status = 200,
-                Message = "Success",
-                Data = transactionMethod
-            });
+            return Ok(new ResponseModel(200, "Success", transactionMethod));
         }
         [HttpGet]
         [Route("search/{title}")]
         public async Task<IActionResult> GetTransactionMethodByTitle(string title)
         {
             var transactionMethod = await _transactionRepo.GetTransactionMethodByTitle(title);
-            return Ok(new ResponseModel
-            {
-                Status = 200,
-                Message = "Success",
-                Data = transactionMethod
-            });
+            return Ok(new ResponseModel(200, "Success", transactionMethod));
         }
     }
 }
