@@ -71,18 +71,38 @@ namespace ExpenseTracker.WebAPI.Controllers
             return BadRequest(new ResponseModel(400, "There are some validation Errors", errors));
         }
 
-        [HttpPatch]
-        [Route("edit")]
-        public async Task<IActionResult> EditProfile([FromBody] UserDTO userToUpdate)
+        [HttpPost]
+        [Route("changePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] PasswordChangeDTO model)
         {
             if (ModelState.IsValid)
             {
-                var user = _mapper.Map<ApplicationUser>(userToUpdate);
+                var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var user = await _userManager.FindByIdAsync(userId);
+                var passwordChangeResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                if (passwordChangeResult.Succeeded)
+                {
+                    return Ok(new ResponseModel(200, "Password Successfully changed", null));
+                }
+                return BadRequest(new ResponseModel(400, "Failed", null));
+            }
+            var errors = ModelState.Values.Select(model => model.Errors).ToList();
+            return BadRequest(new ResponseModel(400, "There are some validation Errors", errors));
+        }
+
+        [HttpPatch]
+        [Route("edit")]
+        public async Task<IActionResult> EditProfile([FromBody] UserToUpdate userToUpdate)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var user = await _userManager.FindByIdAsync(userId); 
+                var updatedUser = _mapper.Map<ApplicationUser>(userToUpdate);
                 var userToReturn = _mapper.Map<UserDTO>(user);
-                var updateResult = await _userManager.UpdateAsync(user);
+                var updateResult = await _userManager.UpdateAsync(updatedUser);
                 if (updateResult.Succeeded)
                 {
-
                     return Ok(new ResponseModel(200, "Profile sucessfully updated", userToReturn));
                 }
                 return BadRequest(new ResponseModel(400, "Update Failed", userToReturn));

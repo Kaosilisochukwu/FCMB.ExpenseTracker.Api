@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ExpenseTracker.WebAPI.DTOs
 {
-    public class UserDTO 
+    public class UserToUpdate
     {
-        public string Id { get; set; }
         [Required(ErrorMessage = "First Name is required", AllowEmptyStrings = false)]
         [StringLength(50, ErrorMessage = "First Name must not be more that 50 characters")]
         [MinLength(2, ErrorMessage = "First Name must not be less that 2 characters")]
@@ -23,10 +22,6 @@ namespace ExpenseTracker.WebAPI.DTOs
         [StringLength(50, ErrorMessage = "Address must not be more that 50 characters")]
         [MinLength(2, ErrorMessage = "Address must not be less that 2 characters")]
         public string Address { get; set; }
-
-        [Required(ErrorMessage = "Email is required")]
-        [DataType(DataType.EmailAddress, ErrorMessage = "Email must be a valid Email Address")]
-        public string Email { get; set; }
 
         [Required(ErrorMessage = "City is required", AllowEmptyStrings = false)]
         [StringLength(50, ErrorMessage = "City must not be more that 50 characters")]
@@ -47,9 +42,5 @@ namespace ExpenseTracker.WebAPI.DTOs
         [StringLength(50, ErrorMessage = "Company must not be more that 50 characters")]
         [MinLength(2, ErrorMessage = "Company must not be less that 2 characters")]
         public string Company { get; set; }
-
-        [Required(ErrorMessage = "Username is Required", AllowEmptyStrings = false)]
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Username must contain only letters and numbers")]
-        public string Username { get; set; }
     }
 }
