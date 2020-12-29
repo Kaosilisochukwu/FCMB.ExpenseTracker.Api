@@ -7,10 +7,9 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["ExpenseTracker.WebAPI/ExpenseTracker.WebAPI.csproj", "ExpenseTracker.WebAPI/"]
-RUN dotnet restore "ExpenseTracker.WebAPI/ExpenseTracker.WebAPI.csproj"
+COPY ["ExpenseTracker.WebAPI.csproj", "./"]
+RUN dotnet restore "./ExpenseTracker.WebAPI.csproj"
 COPY . .
-WORKDIR "/src/ExpenseTracker.WebAPI"
 RUN dotnet build "ExpenseTracker.WebAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
