@@ -54,7 +54,7 @@ namespace ExpenseTracker.WebAPI.Services.Repositories
 
         public async Task<TransactionMethod> GetTransactionMethodByTitle(string title)
         {
-            return await _context.TransactionMethods.FirstOrDefaultAsync(transactionMethod => transactionMethod.Title == title);
+            return await _context.TransactionMethods.FirstOrDefaultAsync(transactionMethod => transactionMethod.Title.ToLower().Contains(title.ToLower()));
         }
     }
 }

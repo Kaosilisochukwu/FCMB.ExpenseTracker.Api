@@ -18,6 +18,7 @@ namespace ExpenseTracker.WebAPI.Maps
             CreateMap<ApplicationUser, UserDTO>();
             CreateMap<UserDTO, ApplicationUser>();
             CreateMap<TransactionMethodToUpdate, TransactionMethod>();
+            CreateMap<UserToUpdate, ApplicationUser>();
         }
     }
 }

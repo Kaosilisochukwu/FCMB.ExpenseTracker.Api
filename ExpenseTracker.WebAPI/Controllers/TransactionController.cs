@@ -75,8 +75,10 @@ namespace ExpenseTracker.WebAPI.Controllers
         {
             if (ModelState.IsValid)
             {
+                var baseStartDate = DateTime.Parse(startDate.ToShortDateString());
+                var baseEndDate = DateTime.Parse(endDate.ToShortDateString());
                 var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var transactions = await _transactionRepo.FilterTransactionsByDateRange(startDate, endDate, userId);
+                var transactions = await _transactionRepo.FilterTransactionsByDateRange(baseStartDate, baseEndDate, userId);
                 return Ok(new ResponseModel(200, "Success", transactions));
             }
             var errors = ModelState.Values.Select(model => model.Errors).ToList();
@@ -96,8 +98,9 @@ namespace ExpenseTracker.WebAPI.Controllers
         [Route("search/{date:datetime}")]
         public async Task<IActionResult> FilterTransactionsByTransactionsByDate(DateTime date)
         {
+            var SearchDate = DateTime.Parse(date.ToShortDateString());
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var transactions = await _transactionRepo.FilterTransactionsByTransactionsByDate(date, userId);
+            var transactions = await _transactionRepo.FilterTransactionsByTransactionsByDate(SearchDate, userId);
             return Ok(new ResponseModel(200, "Success", transactions));
         }
 

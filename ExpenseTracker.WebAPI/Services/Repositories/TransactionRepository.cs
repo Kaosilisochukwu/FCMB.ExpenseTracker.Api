@@ -31,20 +31,22 @@ namespace ExpenseTracker.WebAPI.Services.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Transaction>> FilterTransactionsByDateRange(DateTime startDate, DateTime endDate, string userId)
+        public async Task<IEnumerable<Transaction>> FilterTransactionsByDateRange(DateTime startDate, DateTime endDate, string userId)
         {
-
-            throw new NotImplementedException();
+            return await _context.Transactions.Where(transaction => transaction.TransactionDate 
+                                                        >= startDate && transaction.TransactionDate 
+                                                        <= endDate && transaction.UserId == userId)
+                                                        .ToListAsync();
         }
 
         public async Task<IEnumerable<Transaction>> FilterTransactionsByTitle(string title, string userId)
         {
-            return await _context.Transactions.Where(transaction => transaction.Title == title && transaction.UserId == userId).ToListAsync();
+            return await _context.Transactions.Where(transaction => transaction.Title.ToLower().Contains(title.ToLower()) && transaction.UserId == userId).ToListAsync();
         }
 
         public async Task<IEnumerable<Transaction>> FilterTransactionsByTransactionsByDate(DateTime date, string userId)
         {
-            return await _context.Transactions.Where(transaction => transaction.TransactionDate == date && transaction.UserId == userId).ToListAsync();
+            return await _context.Transactions.Where(transaction => transaction.TransactionDate >= date && transaction.TransactionDate <= date.AddDays(1) && transaction.UserId == userId).ToListAsync();
         }
 
         public async Task<IEnumerable<Transaction>> FilterTransactionsByTransactionsMethod(int transactionMethodId, string userId)
