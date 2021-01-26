@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Security.Claims;
@@ -158,5 +159,49 @@ namespace ExpenseTracker.WebAPI.Controllers
             await _signInManager.SignOutAsync();
             return Ok();
         }
+
+        [HttpGet]
+        [Route("all")]
+        public async Task<IActionResult> GetAllUers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+
+            if(users.Count > 0)
+            {
+                return Ok(new ResponseModel(200, "Success", users));
+            }
+            return BadRequest(new ResponseModel(400, "Users not found", users));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
+        {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (userId != null)
+            {
+                var userToReturn = await getuserById(userId);
+                return Ok(new ResponseModel(200, "Success", userToReturn));
+            }
+            return BadRequest(new ResponseModel(400, "Failed", null));
+        }
+
+        [HttpGet]
+        [Route("{userId}")]
+        public async Task<IActionResult> GetUser(string userId)
+        {
+            var user = await getuserById(userId);
+            if(user != null)
+            {
+                return Ok(new ResponseModel(200, "Success", user));
+            }
+            return BadRequest(new ResponseModel(400, "User not found", user));
+        }
+
+        async Task<UserDTO> getuserById(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return _mapper.Map<UserDTO>(user);
+        }
+
     }
 }
